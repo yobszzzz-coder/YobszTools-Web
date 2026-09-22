@@ -368,9 +368,10 @@
 
 <script>
 // ==============================================
-// 🔑 GANTI DENGAN API KEY REMOVE.BG KAMU DI BAWAH
-const API_KEY_REMOVEBG = 'bg-mJAnSGqyZyc6oDsHwrdiQn6P';
+// 🔑 GANTI DENGAN API KEY CLIPDROP KAMU DI BAWAH
+const API_KEY = 'sk-GANTI-DENGAN-KEY-CLIPDROP-KAMU';
 // ==============================================
+
 
 // ELEMEN UTAMA
 const halamanUtama = document.getElementById('halamanUtama');
@@ -468,16 +469,19 @@ async function hapusBg(file) {
     try {
         const formData = new FormData();
         formData.append('image_file', file);
-        formData.append('size', 'preview');
 
-        const res = await fetch('https://api.remove.bg/v1.0/removebg', {
+        const res = await fetch('https://clipdrop-api.co/remove-background/v1', {
             method: 'POST',
-            headers: { 'X-Api-Key': API_KEY_REMOVEBG },
+            headers: {
+                'x-api-key': API_KEY
+            },
             body: formData
         });
 
         if (!res.ok) {
-            if (res.status === 402) throw new Error('Kuota habis! Coba ganti API key');
+            if (res.status === 402) {
+                throw new Error('Kuota habis! Clipdrop 100x/bulan');
+            }
             throw new Error(`Kesalahan: ${res.status}`);
         }
 
@@ -493,6 +497,7 @@ async function hapusBg(file) {
         loadingBg.classList.remove('tampil');
     }
 }
+
 
 unduhBg.addEventListener('click', () => {
     if (!blobHasilBg) return;
