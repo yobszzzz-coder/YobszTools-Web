@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOBSZ TOOLS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #e8e8e8;
+            background-image: radial-gradient(#000 1px, transparent 1px);
+            background-size: 20px 20px;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 460px;
+            margin: 0 auto;
+        }
+
+        .top-server {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .server-btn {
+            background: #000;
+            color: #fff;
+            padding: 10px 30px;
+            border-radius: 30px;
+            border: 3px solid #fff;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .logo-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+        .logo-title i {
+            color: #ffd000;
+        }
+
+        .main-box {
+            background: #fff;
+            border: 4px solid #000;
+            border-radius: 16px;
+            padding: 25px 20px;
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.35);
+            margin-bottom: 20px;
+        }
+
+        /* ===== PILIHAN TOOLS ===== */
+        .tools-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .tool-card {
+            border: 4px solid #000;
+            border-radius: 12px;
+            padding: 25px 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.35);
+        }
+        .tool-card:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.35);
+        }
+        .tool-card:active {
+            transform: translate(3px, 3px);
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.35);
+        }
+        .tool-card.purple {
+            background: #5145f3;
+            color: #fff;
+        }
+        .tool-card.yellow {
+            background: #ffd000;
+            color: #000;
+        }
+        .tool-card i {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .tool-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        .tool-card p {
+            font-size: 0.85rem;
+            opacity: 0.85;
+        }
+
+        /* ===== NAVIGASI ===== */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            border: none;
+            color: #5145f3;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin-bottom: 15px;
+            padding: 5px 0;
+        }
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== FORM & TOMBOL ===== */
+        label {
+            font-weight: 700;
+            display: block;
+            margin-bottom: 8px;
+            color: #222;
+        }
+        textarea, input[type="text"] {
+            width: 100%;
+            border: 3px solid #000;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+        .upload-box {
+            border: 4px dashed #5145f3;
+            border-radius: 12px;
+            padding: 35px 20px;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 15px;
+            background: #f8f8ff;
+            transition: 0.2s;
+        }
+        .upload-box:hover {
+            border-color: #ffd000;
+            background: #fffdf0;
+        }
+        .upload-box p {
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        input[type="file"] {
+            display: none;
+        }
+
+        .btn {
+            width: 100%;
+            border: 4px solid #000;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.35);
+            transition: transform 0.1s;
+            margin-bottom: 12px;
+        }
+        .btn:active {
+            transform: translate(3px, 3px);
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.35);
+        }
+        .btn-purple { background: #5145f3; color: #fff; }
+        .btn-yellow { background: #ffd000; color: #000; }
+
+        /* ===== LOADING DI DALAM BOX ===== */
+        .loading-box {
+            text-align: center;
+            padding: 25px;
+            display: none;
+        }
+        .loading-box.tampil {
+            display: block;
+        }
+        .spinner {
+            border: 4px solid #ddd;
+            border-top: 4px solid #5145f3;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-box p {
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* ===== HASIL ===== */
+        .hasil-box {
+            text-align: center;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border: 3px solid #000;
+            border-radius: 10px;
+            display: none;
+        }
+        .hasil-box.tampil {
+            display: block;
+        }
+        .preview-img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .transparent-bg {
+            background-image: linear-gradient(45deg, #ccc 25%, transparent 25%),
+                              linear-gradient(-45deg, #ccc 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, #ccc 75%),
+                              linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 20px 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        canvas {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        /* ===== ALERT BUATAN ===== */
+        .alert-kotak {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            max-width: 320px;
+            z-index: 9999;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+        }
+        .alert-kotak.muncul {
+            transform: translateX(0);
+        }
+        .alert-isi {
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 3px solid #000;
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.35);
+            font-weight: 600;
+        }
+        .alert-sukses { background: #e8f5e9; color: #2e7d32; border-color: #4caf50; }
+        .alert-error { background: #ffebee; color: #b71c1c; border-color: #f44336; }
+        .alert-info { background: #e3f2fd; color: #0d47a1; border-color: #2196f3; }
+
+        .hidden { display: none !important; }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ALERT BUATAN -->
+    <div class="alert-kotak" id="alertSamping">
+        <div class="alert-isi" id="alertIsi"></div>
+    </div>
+
+    <div class="container">
+        <div class="top-server">
+            <div class="server-btn">YOBSZ TOOLS</div>
+        </div>
+
+        <h1 class="logo-title">YOBSZ TOOLS <i class="fas fa-crown"></i></h1>
+
+        <!-- HALAMAN UTAMA: PILIHAN TOOLS -->
+        <div class="main-box" id="halamanUtama">
+            <div class="tools-menu">
+                <div class="tool-card purple" onclick="bukaTool('removebg')">
+                    <i class="fas fa-eraser"></i>
+                    <h3>Hapus Background</h3>
+                    <p>Hapus latar belakang foto otomatis</p>
+                </div>
+
+                <div class="tool-card yellow" onclick="bukaTool('qrcode')">
+                    <i class="fas fa-qrcode"></i>
+                    <h3>Buat QR Code</h3>
+                    <p>Ubah teks/link menjadi kode QR</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN REMOVE BG -->
+        <div class="main-box hidden" id="halamanRemovebg">
+            <button class="back-btn" onclick="kembaliUtama()">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </button>
+            <h3 style="text-align:center; margin-bottom:20px;"> Hapus Background Foto</h3>
+
+            <div class="upload-box" id="uploadBoxBg">
+                <i class="fas fa-cloud-upload-alt" style="font-size:32px; color:#5145f3;"></i>
+                <p>Klik atau Seret Foto ke Sini</p>
+                <small>JPG, PNG — Maks 12MB</small>
+                <input type="file" id="fileBg" accept="image/*">
+            </div>
+
+            <div class="loading-box" id="loadingBg">
+                <div class="spinner"></div>
+                <p>Sedang memproses...</p>
+            </div>
+
+            <div class="hasil-box" id="hasilBg">
+                <h4>Foto Asli</h4>
+                <img class="preview-img" id="imgAsli" alt="Asli">
+                <h4 style="margin-top:15px;">✅ Hasil</h4>
+                <div class="transparent-bg">
+                    <img class="preview-img" id="imgHasilBg" alt="Hasil">
+                </div>
+                <button class="btn btn-yellow" id="unduhBg" style="margin-top:15px;">
+                    <i class="fas fa-download"></i> UNDUH PNG
+                </button>
+            </div>
+        </div>
+
+        <!-- HALAMAN QR CODE -->
+        <div class="main-box hidden" id="halamanQr">
+            <button class="back-btn" onclick="kembaliUtama()">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </button>
+            <h3 style="text-align:center; margin-bottom:20px;">📱 Buat QR Code</h3>
+
+            <label>Teks / Link / Nomor</label>
+            <textarea id="teksQr" placeholder="Tulis link atau teks di sini..." rows="4"></textarea>
+
+            <button class="btn btn-purple" id="buatQrBtn">
+                <i class="fas fa-magic"></i> BUAT QR CODE
+            </button>
+
+            <div class="loading-box" id="loadingQr">
+                <div class="spinner"></div>
+                <p>Sedang membuat...</p>
+            </div>
+
+            <div class="hasil-box" id="hasilQr">
+                <canvas id="kanvasQr"></canvas>
+                <button class="btn btn-yellow" id="unduhQr" style="margin-top:15px;">
+                    <i class="fas fa-download"></i> UNDUH GAMBAR
+                </button>
+            </div>
+        </div>
+
+        <p class="footer-text">© 2026 YOBSZ TOOLS — Semua Gratis ✅</p>
+    </div>
+
+<script>
+// ==============================================
+// 🔑 GANTI DENGAN API KEY REMOVE.BG KAMU DI BAWAH
+const API_KEY_REMOVEBG = 'bg-9Qj1WdA579bXUcsMLnzz6We5';
+// ==============================================
+
+// ELEMEN UTAMA
+const halamanUtama = document.getElementById('halamanUtama');
+const halamanRemovebg = document.getElementById('halamanRemovebg');
+const halamanQr = document.getElementById('halamanQr');
+
+// ALERT BUATAN
+function tampilAlert(pesan, jenis = 'info') {
+    const kotak = document.getElementById('alertSamping');
+    const isi = document.getElementById('alertIsi');
+    
+    isi.className = `alert-isi alert-${jenis}`;
+    isi.innerHTML = pesan;
+    kotak.classList.add('muncul');
+    
+    setTimeout(() => {
+        kotak.classList.remove('muncul');
+    }, 3500);
+}
+
+// BUKA HALAMAN TOOL
+function bukaTool(nama) {
+    halamanUtama.classList.add('hidden');
+    if (nama === 'removebg') {
+        halamanRemovebg.classList.remove('hidden');
+    } else if (nama === 'qrcode') {
+        halamanQr.classList.remove('hidden');
+    }
+}
+
+// KEMBALI KE HALAMAN UTAMA
+function kembaliUtama() {
+    halamanRemovebg.classList.add('hidden');
+    halamanQr.classList.add('hidden');
+    halamanUtama.classList.remove('hidden');
+    
+    // Reset hasil
+    document.getElementById('hasilBg').classList.remove('tampil');
+    document.getElementById('hasilQr').classList.remove('tampil');
+    document.getElementById('teksQr').value = '';
+}
+
+// ==============================================
+// BAGIAN REMOVE BACKGROUND
+// ==============================================
+const uploadBoxBg = document.getElementById('uploadBoxBg');
+const fileBg = document.getElementById('fileBg');
+const loadingBg = document.getElementById('loadingBg');
+const hasilBg = document.getElementById('hasilBg');
+const imgAsli = document.getElementById('imgAsli');
+const imgHasilBg = document.getElementById('imgHasilBg');
+const unduhBg = document.getElementById('unduhBg');
+let blobHasilBg = null;
+
+uploadBoxBg.addEventListener('click', () => fileBg.click());
+uploadBoxBg.addEventListener('dragover', e => {
+    e.preventDefault();
+    uploadBoxBg.style.borderColor = '#ffd000';
+});
+uploadBoxBg.addEventListener('dragleave', () => {
+    uploadBoxBg.style.borderColor = '#5145f3';
+});
+uploadBoxBg.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadBoxBg.style.borderColor = '#5145f3';
+    if (e.dataTransfer.files[0]) prosesFileBg(e.dataTransfer.files[0]);
+});
+fileBg.addEventListener('change', e => {
+    if (e.target.files[0]) prosesFileBg(e.target.files[0]);
+});
+
+function prosesFileBg(file) {
+    if (!file.type.startsWith('image/')) {
+        tampilAlert('❌ Pilih file gambar saja!', 'error');
+        return;
+    }
+    if (file.size > 12 * 1024 * 1024) {
+        tampilAlert('❌ File terlalu besar! Maksimal 12MB', 'error');
+        return;
+    }
+
+    // Tampil foto asli
+    const reader = new FileReader();
+    reader.onload = e => imgAsli.src = e.target.result;
+    reader.readAsDataURL(file);
+
+    // Kirim ke API
+    hapusBg(file);
+}
+
+async function hapusBg(file) {
+    hasilBg.classList.remove('tampil');
+    loadingBg.classList.add('tampil');
+
+    try {
+        const formData = new FormData();
+        formData.append('image_file', file);
+        formData.append('size', 'preview');
+
+        const res = await fetch('https://api.remove.bg/v1.0/removebg', {
+            method: 'POST',
+            headers: { 'X-Api-Key': API_KEY_REMOVEBG },
+            body: formData
+        });
+
+        if (!res.ok) {
+            if (res.status === 402) throw new Error('Kuota habis! Coba ganti API key');
+            throw new Error(`Kesalahan: ${res.status}`);
+        }
+
+        blobHasilBg = await res.blob();
+        imgHasilBg.src = URL.createObjectURL(blobHasilBg);
+
+        loadingBg.classList.remove('tampil');
+        hasilBg.classList.add('tampil');
+        tampilAlert('✅ Background berhasil dihapus!', 'sukses');
+
+    } catch (err) {
+        tampilAlert('❌ ' + err.message, 'error');
+        loadingBg.classList.remove('tampil');
+    }
+}
+
+unduhBg.addEventListener('click', () => {
+    if (!blobHasilBg) return;
+    const link = document.createElement('a');
+    link.download = 'yobsz-nobg.png';
+    link.href = URL.createObjectURL(blobHasilBg);
+    link.click();
+});
+
+// ==============================================
+// BAGIAN QR CODE
+// ==============================================
+const teksQr = document.getElementById('teksQr');
+const buatQrBtn = document.getElementById('buatQrBtn');
+const loadingQr = document.getElementById('loadingQr');
+const hasilQr = document.getElementById('hasilQr');
+const kanvasQr = document.getElementById('kanvasQr');
+const unduhQr = document.getElementById('unduhQr');
+
+buatQrBtn.addEventListener('click', async () => {
+    const teks = teksQr.value.trim();
+    if (!teks) {
+        tampilAlert('⚠️ Tulis sesuatu dulu!', 'info');
+        return;
+    }
+
+    hasilQr.classList.remove('tampil');
+    loadingQr.classList.add('tampil');
+
+    try {
+        await QRCode.toCanvas(kanvasQr, teks, {
+            width: 250,
+            margin: 2,
+            color: { dark: '#000', light: '#fff' }
+        });
+
+        loadingQr.classList.remove('tampil');
+        hasilQr.classList.add('tampil');
+        tampilAlert('✅ QR Code berhasil dibuat!', 'sukses');
+
+    } catch (err) {
+        tampilAlert('❌ Gagal membuat QR Code', 'error');
+        loadingQr.classList.remove('tampil');
+    }
+});
+
+unduhQr.addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = 'yobsz-qrcode.png';
+    link.href = kanvasQr.toDataURL('image/png');
+    link.click();
+});
+</script>
+</body>
+</html>
